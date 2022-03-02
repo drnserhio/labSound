@@ -1,0 +1,12 @@
+server:
+  port: 4212
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:5600@localhost:27017/audio?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+  servlet:
+    multipart:
+      max-file-size: 1000000000
+      enabled: true
+      file-size-threshold: 100000000

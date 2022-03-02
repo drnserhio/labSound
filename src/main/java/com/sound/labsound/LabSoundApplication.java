@@ -9,5 +9,4 @@ public class LabSoundApplication {
     public static void main(String[] args) {
         SpringApplication.run(LabSoundApplication.class, args);
     }
-
 }
