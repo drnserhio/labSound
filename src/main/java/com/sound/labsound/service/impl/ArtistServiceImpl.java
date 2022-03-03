@@ -1,12 +1,12 @@
 package com.sound.labsound.service.impl;
 
-import com.sound.labsound.exception.ArtistExistsException;
-import com.sound.labsound.exception.ArtistNotFoundException;
+import com.sound.labsound.exception.domain.ArtistExistsException;
+import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Album;
 import com.sound.labsound.model.Artist;
 import com.sound.labsound.model.Audio;
 import com.sound.labsound.repos.AlbumRepository;
-import com.sound.labsound.repos.AtristRepository;
+import com.sound.labsound.repos.ArtistRepository;
 import com.sound.labsound.repos.AudioRepository;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class ArtistServiceImpl implements ArtistService {
 
-    private final AtristRepository atristRepository;
+    private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final AudioRepository audioRepository;
 
@@ -33,7 +33,7 @@ public class ArtistServiceImpl implements ArtistService {
         art.setArtist(artist);
         art.setTitle(title);
         art.setCountSound(0);
-        Artist save = atristRepository.save(art);
+        Artist save = artistRepository.save(art);
         //TODO: add save image
         return save;
     }
@@ -48,7 +48,7 @@ public class ArtistServiceImpl implements ArtistService {
         art.setArtist(artist);
         art.setTitle("...?");
         art.setCountSound(0);
-        Artist save = atristRepository.save(art);
+        Artist save = artistRepository.save(art);
         //TODO: add save image
         return save;
     }
@@ -59,10 +59,10 @@ public class ArtistServiceImpl implements ArtistService {
         if (!existsByArtist(artist)) {
             throw new ArtistNotFoundException("Artist not found.");
         }
-        Artist art = atristRepository.findByArtist(artist);
+        Artist art = artistRepository.findByArtist(artist);
         art.setArtist(artist);
         art.setTitle(title);
-        Artist save = atristRepository.save(art);
+        Artist save = artistRepository.save(art);
         //TODO: add save image
         return save;
     }
@@ -73,9 +73,9 @@ public class ArtistServiceImpl implements ArtistService {
         if (!existsByArtist(artist)) {
             throw new ArtistNotFoundException("Artist not found.");
         }
-        Artist art = atristRepository.findByArtist(artist);
+        Artist art = artistRepository.findByArtist(artist);
         art.setArtist(artist);
-        Artist save = atristRepository.save(art);
+        Artist save = artistRepository.save(art);
         //TODO: add save image
         return save;
     }
@@ -89,7 +89,7 @@ public class ArtistServiceImpl implements ArtistService {
         deleteInAlbum(artistName);
         deleteInAudio(artistName);
         Artist artist = findByArtist(artistName);
-        atristRepository.delete(artist);
+        artistRepository.delete(artist);
         return true;
     }
 
@@ -105,7 +105,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public boolean existsByArtist(String artistName) {
-        if (atristRepository.existsByArtist(artistName)) {
+        if (artistRepository.existsByArtist(artistName)) {
             return true;
         }
         return false;
@@ -117,7 +117,7 @@ public class ArtistServiceImpl implements ArtistService {
         if (!existsByArtist(artistName)) {
             throw new ArtistNotFoundException("Artist not found.");
         }
-        Artist artist = atristRepository.findByArtist(artistName);
+        Artist artist = artistRepository.findByArtist(artistName);
         return artist;
     }
 }

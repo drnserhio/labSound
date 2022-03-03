@@ -1,8 +1,8 @@
 package com.sound.labsound.service.impl;
 
-import com.sound.labsound.exception.AlbumNotFoundException;
-import com.sound.labsound.exception.AudioExistsException;
-import com.sound.labsound.exception.AudioNotFoundException;
+import com.sound.labsound.exception.domain.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.AudioExistsException;
+import com.sound.labsound.exception.domain.AudioNotFoundException;
 import com.sound.labsound.model.Audio;
 import com.sound.labsound.repos.AlbumRepository;
 import com.sound.labsound.repos.AudioRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 

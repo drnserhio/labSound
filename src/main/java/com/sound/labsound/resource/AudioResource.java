@@ -1,8 +1,8 @@
 package com.sound.labsound.resource;
 
-import com.sound.labsound.exception.AlbumNotFoundException;
-import com.sound.labsound.exception.AudioExistsException;
-import com.sound.labsound.exception.AudioNotFoundException;
+import com.sound.labsound.exception.domain.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.AudioExistsException;
+import com.sound.labsound.exception.domain.AudioNotFoundException;
 import com.sound.labsound.model.Audio;
 import com.sound.labsound.service.AudioService;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/audio")
+@CrossOrigin("http://localhost:4200")
 public class AudioResource {
 
     private final AudioService audioService;

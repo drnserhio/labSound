@@ -1,7 +1,8 @@
 package com.sound.labsound.service;
 
-import com.sound.labsound.exception.AlbumExistsException;
-import com.sound.labsound.exception.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.AlbumExistsException;
+import com.sound.labsound.exception.domain.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Album;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,8 +11,8 @@ import java.util.Set;
 
 public interface AlbumService {
 
-    Album createAlbum(MultipartFile imageFile, String albumName, String artist, String yearRelease) throws AlbumExistsException;
-    Album updateAlbum(MultipartFile imageFile, String albumName, String artist, String yearRelease) throws AlbumNotFoundException;
+    Album createAlbum(MultipartFile imageFile, String albumName, String artist, String yearRelease) throws AlbumExistsException, ArtistNotFoundException;
+    Album updateAlbum(MultipartFile imageFile, String albumName, String artist, String yearRelease) throws AlbumNotFoundException, ArtistNotFoundException;
 
     boolean deleteAlbum(String album) throws AlbumNotFoundException;
 

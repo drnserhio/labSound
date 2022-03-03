@@ -1,8 +1,8 @@
 package com.sound.labsound.service;
 
-import com.sound.labsound.exception.AlbumNotFoundException;
-import com.sound.labsound.exception.AudioExistsException;
-import com.sound.labsound.exception.AudioNotFoundException;
+import com.sound.labsound.exception.domain.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.AudioExistsException;
+import com.sound.labsound.exception.domain.AudioNotFoundException;
 import com.sound.labsound.model.Audio;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.web.multipart.MultipartFile;

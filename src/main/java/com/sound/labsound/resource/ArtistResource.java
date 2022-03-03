@@ -1,30 +1,26 @@
 package com.sound.labsound.resource;
 
-import com.sound.labsound.exception.ArtistExistsException;
-import com.sound.labsound.exception.ArtistNotFoundException;
-import com.sound.labsound.model.Album;
+import com.sound.labsound.exception.domain.ArtistExistsException;
+import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Artist;
-import com.sound.labsound.model.Audio;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Set;
 
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/artist")
+@CrossOrigin("http://localhost:4200")
 public class ArtistResource {
 
     private final ArtistService artistService;
 
 
-    @PostMapping("/create_artist")
+    @PostMapping("/create")
     public ResponseEntity<Artist> createArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist,
@@ -43,7 +39,7 @@ public class ArtistResource {
         return new ResponseEntity<>(art, OK);
     }
 
-    @PutMapping("/update_artist")
+    @PutMapping("/update")
     public ResponseEntity<Artist> updateArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist,

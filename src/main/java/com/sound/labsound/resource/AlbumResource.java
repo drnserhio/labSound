@@ -1,11 +1,11 @@
 package com.sound.labsound.resource;
 
-import com.sound.labsound.exception.AlbumExistsException;
-import com.sound.labsound.exception.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.AlbumExistsException;
+import com.sound.labsound.exception.domain.AlbumNotFoundException;
+import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Album;
 import com.sound.labsound.service.AlbumService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/album")
+@CrossOrigin("http://localhost:4200")
 public class AlbumResource {
 
     private final AlbumService albumService;
@@ -30,7 +31,7 @@ public class AlbumResource {
             @PathVariable("albumName") String albumName,
             @RequestParam("artist") String artist,
             @RequestParam("yearRelease") String yearRelease)
-            throws AlbumExistsException {
+            throws AlbumExistsException, ArtistNotFoundException {
         Album album = albumService.createAlbum(imageFile, albumName, artist, yearRelease);
         return new ResponseEntity<>(album, OK);
     }
@@ -41,7 +42,7 @@ public class AlbumResource {
             @PathVariable("albumName") String albumName,
             @RequestParam("artist") String artist,
             @RequestParam("yearRelease") String yearRelease)
-            throws AlbumNotFoundException {
+            throws AlbumNotFoundException, ArtistNotFoundException {
         Album album = albumService.updateAlbum(imageFile, albumName, artist, yearRelease);
         return new ResponseEntity<>(album, CREATED);
     }

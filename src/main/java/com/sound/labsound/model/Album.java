@@ -19,4 +19,5 @@ public class Album {
     private String artist;
     private String albumName;
     private String yearRelease;
+    private String imagePoster;
 }

@@ -1,7 +1,7 @@
 package com.sound.labsound.service;
 
-import com.sound.labsound.exception.ArtistExistsException;
-import com.sound.labsound.exception.ArtistNotFoundException;
+import com.sound.labsound.exception.domain.ArtistExistsException;
+import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Artist;
 import org.springframework.web.multipart.MultipartFile;
 
