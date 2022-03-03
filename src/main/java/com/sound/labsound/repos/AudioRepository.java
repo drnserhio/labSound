@@ -12,6 +12,8 @@ public interface AudioRepository extends MongoRepository<Audio, String> {
     Audio findByArtist(String artist);
     Audio findByAlbumName(String albumName);
 
+    Audio findBySoundName(String soundName);
+
     Set<Audio> findAllByArtistContaining(String artist);
     Set<Audio> findAllByAlbumNameContaining(String albumName);
 

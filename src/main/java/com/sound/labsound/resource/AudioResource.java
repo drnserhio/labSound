@@ -1,6 +1,8 @@
 package com.sound.labsound.resource;
 
+import com.sound.labsound.exception.AlbumNotFoundException;
 import com.sound.labsound.exception.AudioExistsException;
+import com.sound.labsound.exception.AudioNotFoundException;
 import com.sound.labsound.model.Audio;
 import com.sound.labsound.service.AudioService;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,7 @@ public class AudioResource {
             @RequestParam("album") String album,
             @RequestParam("soundName") String soundName,
             @RequestParam("file")MultipartFile file)
-            throws IOException, AudioExistsException {
+            throws IOException, AudioExistsException, AlbumNotFoundException {
         boolean upload = audioService.uploadAudio(artist, album, soundName, file);
         return new ResponseEntity<>(upload, OK);
     }
@@ -50,9 +52,17 @@ public class AudioResource {
 
     @GetMapping("/all_audio_by_album/{album}")
     public ResponseEntity<Set<Audio>> getAllAudiosByAlbumName(
-            @PathVariable("album") String album) {
+            @PathVariable("album") String album) throws AlbumNotFoundException {
         Set<Audio> allAudiosByArtist = audioService.getAllAudiosByAlbumName(album).get();
         return new ResponseEntity<>(allAudiosByArtist, OK);
+    }
+
+    @DeleteMapping("/delete_audio/{soundName}")
+    public ResponseEntity<Boolean> deleteAudio(
+            @PathVariable("soundName") String soundName)
+            throws AudioNotFoundException {
+        boolean delete = audioService.deleteAudio(soundName);
+        return new ResponseEntity<>(delete, OK);
     }
 
 }

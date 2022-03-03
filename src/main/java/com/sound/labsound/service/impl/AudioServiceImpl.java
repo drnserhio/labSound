@@ -1,8 +1,12 @@
-package com.sound.labsound.service;
+package com.sound.labsound.service.impl;
 
+import com.sound.labsound.exception.AlbumNotFoundException;
 import com.sound.labsound.exception.AudioExistsException;
+import com.sound.labsound.exception.AudioNotFoundException;
 import com.sound.labsound.model.Audio;
+import com.sound.labsound.repos.AlbumRepository;
 import com.sound.labsound.repos.AudioRepository;
+import com.sound.labsound.service.AudioService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -16,20 +20,24 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class AudioServiceImpl implements AudioService{
+public class AudioServiceImpl implements AudioService {
 
     private final AudioRepository audioRepository;
+    private final AlbumRepository albumRepository;
     private final GridFsTemplate gridFsTemplate;
 
 
     @Override
     public boolean uploadAudio(String artist, String albumName, String soundName, MultipartFile file)
-            throws AudioExistsException {
+            throws AudioExistsException, AlbumNotFoundException {
         if (file.isEmpty()) {
             throw new AudioExistsException("Audio file empty or damage upload.");
         }
         if (isExistsBySoundName(soundName)) {
             throw new AudioExistsException("Audio sound name already exists.");
+        }
+        if (!isExistsByAlbumName(albumName)) {
+            throw new AlbumNotFoundException("Album not found.");
         }
         Audio audio = new Audio();
         audio.setArtist(artist);
@@ -41,6 +49,24 @@ public class AudioServiceImpl implements AudioService{
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAudio(String soundName)
+            throws AudioNotFoundException {
+        if(!isExistsBySoundName(soundName)) {
+            throw new AudioNotFoundException("Audio not found.");
+        }
+        Audio audio = audioRepository.findBySoundName(soundName);
+        audioRepository.delete(audio);
+        return true;
+    }
+
+    private boolean isExistsByAlbumName(String albumName) {
+        if (albumRepository.existsByAlbumName(albumName)) {
+            return true;
         }
         return false;
     }
@@ -61,8 +87,12 @@ public class AudioServiceImpl implements AudioService{
     }
 
     @Override
-    public Optional<Set<Audio>> getAllAudiosByAlbumName(String albumName) {
+    public Optional<Set<Audio>> getAllAudiosByAlbumName(String albumName)
+            throws AlbumNotFoundException {
         Optional<Set<Audio>> audio = Optional.empty();
+        if (!isExistsByAlbumName(albumName)) {
+            throw new AlbumNotFoundException("Album not found");
+        }
         try {
           audio = Optional.ofNullable(audioRepository.findAllByAlbumNameContaining(albumName));
         } catch (Exception e) {
