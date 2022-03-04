@@ -10,22 +10,39 @@ import com.sound.labsound.repos.ArtistRepository;
 import com.sound.labsound.repos.AudioRepository;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final AudioRepository audioRepository;
 
+
+    public static final String ARTIST_IMAGE_PATH = "/artist/image/";
+    public static final String FORWARD_SLASH = "/";
+    public static final String DOT = "."; // filename.jpg
+    public static final String JPG_EXSTENSION = "jpg";
+
+    public static final String ARTIST_FOLDER = System.getProperty("user.home") + "/labSound/artist/";
+
     @Override
     public Artist createArtist(MultipartFile fileImage, String artist, String title)
-            throws ArtistExistsException {
+            throws ArtistExistsException, IOException {
         if (existsByArtist(artist)) {
             throw new ArtistExistsException("Artist already exists.");
         }
@@ -33,14 +50,14 @@ public class ArtistServiceImpl implements ArtistService {
         art.setArtist(artist);
         art.setTitle(title);
         art.setCountSound(0);
+        saveImage(art, fileImage);
         Artist save = artistRepository.save(art);
-        //TODO: add save image
         return save;
     }
 
     @Override
     public Artist createArtist(MultipartFile fileImage, String artist)
-            throws ArtistExistsException {
+            throws ArtistExistsException, IOException {
         if (existsByArtist(artist)) {
             throw new ArtistExistsException("Artist already exists.");
         }
@@ -48,35 +65,35 @@ public class ArtistServiceImpl implements ArtistService {
         art.setArtist(artist);
         art.setTitle("...?");
         art.setCountSound(0);
+        saveImage(art, fileImage);
         Artist save = artistRepository.save(art);
-        //TODO: add save image
         return save;
     }
 
     @Override
     public Artist updateArtist(MultipartFile fileImage, String artist, String title)
-            throws ArtistNotFoundException {
+            throws ArtistNotFoundException, IOException {
         if (!existsByArtist(artist)) {
             throw new ArtistNotFoundException("Artist not found.");
         }
         Artist art = artistRepository.findByArtist(artist);
         art.setArtist(artist);
         art.setTitle(title);
+        saveImage(art, fileImage);
         Artist save = artistRepository.save(art);
-        //TODO: add save image
         return save;
     }
 
     @Override
     public Artist updateArtist(MultipartFile fileImage, String artist)
-            throws ArtistNotFoundException {
+            throws ArtistNotFoundException, IOException {
         if (!existsByArtist(artist)) {
             throw new ArtistNotFoundException("Artist not found.");
         }
         Artist art = artistRepository.findByArtist(artist);
         art.setArtist(artist);
+        saveImage(art, fileImage);
         Artist save = artistRepository.save(art);
-        //TODO: add save image
         return save;
     }
 
@@ -120,4 +137,24 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistRepository.findByArtist(artistName);
         return artist;
     }
+
+    private void saveImage(Artist artist, MultipartFile imageFile) throws IOException {
+        if (imageFile != null) {
+            Path workFolder = Paths.get(ARTIST_FOLDER + artist.getArtist())
+                    .toAbsolutePath().normalize();
+            if (!Files.exists(workFolder)) {
+                Files.createDirectories(workFolder);
+            }
+            Files.deleteIfExists(Paths.get(workFolder + artist.getArtist() + DOT + JPG_EXSTENSION));
+            Files.copy(imageFile.getInputStream(), workFolder.resolve(artist.getArtist() + DOT + JPG_EXSTENSION), REPLACE_EXISTING);
+            artist.setImage(setImage(artist.getArtist()));
+            log.info("FILE_SAVED_IN_FILE_SYSTEM " + imageFile.getOriginalFilename());
+        }
+    }
+
+    private String setImage(String albumName) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path(
+                ARTIST_IMAGE_PATH + albumName + FORWARD_SLASH + albumName + DOT + JPG_EXSTENSION).toUriString();
+    }
+
 }

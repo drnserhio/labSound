@@ -87,7 +87,7 @@ public class AudioServiceImpl implements AudioService {
 
     @Override
     public Optional<Set<Audio>> getAllAudiosByAlbumName(String albumName)
-            throws AlbumNotFoundException {
+            throws AlbumNotFoundException, AudioExistsException {
         Optional<Set<Audio>> audio = Optional.empty();
         if (!isExistsByAlbumName(albumName)) {
             throw new AlbumNotFoundException("Album not found");
@@ -96,6 +96,9 @@ public class AudioServiceImpl implements AudioService {
           audio = Optional.ofNullable(audioRepository.findAllByAlbumNameContaining(albumName));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (audio.get().size() == 0) {
+            throw new AudioExistsException("Album don't have sound.");
         }
         return audio;
     }

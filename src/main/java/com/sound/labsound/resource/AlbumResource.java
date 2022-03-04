@@ -10,11 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 
+import static com.sound.labsound.service.impl.AlbumServiceImpl.ALBUM_FOLDER;
+import static com.sound.labsound.service.impl.AlbumServiceImpl.FORWARD_SLASH;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
 @AllArgsConstructor
@@ -31,7 +37,7 @@ public class AlbumResource {
             @PathVariable("albumName") String albumName,
             @RequestParam("artist") String artist,
             @RequestParam("yearRelease") String yearRelease)
-            throws AlbumExistsException, ArtistNotFoundException {
+            throws AlbumExistsException, ArtistNotFoundException, IOException {
         Album album = albumService.createAlbum(imageFile, albumName, artist, yearRelease);
         return new ResponseEntity<>(album, OK);
     }
@@ -42,7 +48,7 @@ public class AlbumResource {
             @PathVariable("albumName") String albumName,
             @RequestParam("artist") String artist,
             @RequestParam("yearRelease") String yearRelease)
-            throws AlbumNotFoundException, ArtistNotFoundException {
+            throws AlbumNotFoundException, ArtistNotFoundException, IOException {
         Album album = albumService.updateAlbum(imageFile, albumName, artist, yearRelease);
         return new ResponseEntity<>(album, CREATED);
     }
@@ -73,5 +79,12 @@ public class AlbumResource {
             throws AlbumNotFoundException {
         boolean delete = albumService.deleteAlbum(album);
         return new ResponseEntity<>(delete, OK);
+    }
+
+    @GetMapping(path = "image/{albumName}/{filename}", produces = IMAGE_JPEG_VALUE)
+    public byte[] getAlbumImage(
+            @PathVariable("albumName") String albumName,
+            @PathVariable("filename") String filename) throws IOException {
+        return Files.readAllBytes(Paths.get(ALBUM_FOLDER + albumName + FORWARD_SLASH + filename));
     }
 }

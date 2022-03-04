@@ -17,7 +17,7 @@ public interface AudioService {
 
     boolean deleteAudio(String soundName) throws AudioNotFoundException;
     Optional<GridFsResource> getAudioBySoundName(String soundName) throws AudioExistsException;
-    Optional<Set<Audio>> getAllAudiosByAlbumName(String albumName) throws AlbumNotFoundException;
+    Optional<Set<Audio>> getAllAudiosByAlbumName(String albumName) throws AlbumNotFoundException, AudioExistsException;
     Optional<Set<Audio>> getAllAudiosByArtist(String artist);
 
     boolean isExistsBySoundName(String soundName);

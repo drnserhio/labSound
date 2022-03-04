@@ -53,7 +53,7 @@ public class AudioResource {
 
     @GetMapping("/all_audio_by_album/{album}")
     public ResponseEntity<Set<Audio>> getAllAudiosByAlbumName(
-            @PathVariable("album") String album) throws AlbumNotFoundException {
+            @PathVariable("album") String album) throws AlbumNotFoundException, AudioExistsException {
         Set<Audio> allAudiosByArtist = audioService.getAllAudiosByAlbumName(album).get();
         return new ResponseEntity<>(allAudiosByArtist, OK);
     }
