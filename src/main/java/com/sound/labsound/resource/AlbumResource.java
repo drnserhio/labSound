@@ -62,7 +62,9 @@ public class AlbumResource {
     }
 
     @GetMapping("/get_all_album_artist/{artist}")
-    public ResponseEntity<Set<Album>> findAllByArtist(String artist) {
+    public ResponseEntity<Set<Album>> findAllByArtist(
+            @PathVariable("artist") String artist)
+            throws ArtistNotFoundException {
         Set<Album> albums = albumService.findAllByArtist(artist);
         return new ResponseEntity<>(albums, OK);
     }

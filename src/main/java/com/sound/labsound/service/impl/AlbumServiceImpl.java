@@ -106,12 +106,15 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Set<Album> findAllByArtist(String artist) {
+    public Set<Album> findAllByArtist(String artist) throws ArtistNotFoundException {
         Set<Album> albums = new HashSet<>();
         try {
            albums = albumRepository.findAllByArtistContaining(artist);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (albums.size() == 0) {
+            throw new ArtistNotFoundException("Atrist don't have albums.");
         }
         return albums;
     }

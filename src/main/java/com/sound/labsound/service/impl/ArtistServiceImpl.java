@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -136,6 +137,11 @@ public class ArtistServiceImpl implements ArtistService {
         }
         Artist artist = artistRepository.findByArtist(artistName);
         return artist;
+    }
+
+    @Override
+    public List<Artist> findAll() {
+        return artistRepository.findAll();
     }
 
     private void saveImage(Artist artist, MultipartFile imageFile) throws IOException {

@@ -19,7 +19,7 @@ public interface AlbumService {
 
 
     Album findByAlbumName(String albumName);
-    Set<Album> findAllByArtist(String artist);
+    Set<Album> findAllByArtist(String artist) throws ArtistNotFoundException;
 
     List<Album> findAll();
 

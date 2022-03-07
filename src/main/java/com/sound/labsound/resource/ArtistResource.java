@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static com.sound.labsound.service.impl.AlbumServiceImpl.FORWARD_SLASH;
 import static com.sound.labsound.service.impl.ArtistServiceImpl.ARTIST_FOLDER;
@@ -87,5 +88,11 @@ public class ArtistResource {
             @PathVariable("artist") String artist,
             @PathVariable("filename") String filename) throws IOException {
         return Files.readAllBytes(Paths.get(ARTIST_FOLDER + artist + FORWARD_SLASH + filename));
+    }
+
+    @GetMapping("/all_artist")
+    public ResponseEntity<List<Artist>> getAllArtist() {
+        List<Artist> artists = artistService.findAll();
+        return new ResponseEntity<>(artists, OK);
     }
 }

@@ -6,6 +6,7 @@ import com.sound.labsound.model.Artist;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface ArtistService {
 
@@ -19,4 +20,6 @@ public interface ArtistService {
     boolean existsByArtist(String artistName);
 
     Artist findByArtist(String artistName) throws ArtistNotFoundException;
+
+    List<Artist> findAll();
 }
