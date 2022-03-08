@@ -25,4 +25,5 @@ public interface AlbumService {
 
     boolean existsByAlbumName(String albumName);
 
+    Album updateAlbumInfo(String albumName, String artist, String yearRelease) throws AlbumNotFoundException, ArtistNotFoundException;
 }

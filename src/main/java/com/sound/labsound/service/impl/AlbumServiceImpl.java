@@ -75,10 +75,29 @@ public class AlbumServiceImpl implements AlbumService {
             throw new ArtistNotFoundException("Artist not found");
         }
         Album album = albumRepository.findByAlbumName(albumName);
+        System.out.println(album.toString());
         album.setAlbumName(albumName);
         album.setArtist(artist);
         album.setYearRelease(yearRelease);
         saveAlbumImage(album, imageFile);
+        Album save = albumRepository.save(album);
+        return save;
+    }
+
+    @Override
+    public Album updateAlbumInfo(String albumName, String artist, String yearRelease)
+            throws AlbumNotFoundException, ArtistNotFoundException {
+        if (!existsByAlbumName(albumName)) {
+            throw new AlbumNotFoundException("Album not found.");
+        }
+        if (!existsByArtist(artist)) {
+            throw new ArtistNotFoundException("Artist not found");
+        }
+        Album album = albumRepository.findByAlbumName(albumName);
+        System.out.println(album.toString());
+        album.setAlbumName(albumName);
+        album.setArtist(artist);
+        album.setYearRelease(yearRelease);
         Album save = albumRepository.save(album);
         return save;
     }
@@ -98,7 +117,7 @@ public class AlbumServiceImpl implements AlbumService {
     public Album findByAlbumName(String albumName) {
         Album album = null;
         try {
-           album = albumRepository.findByAlbumNameContaining(albumName);
+           album = albumRepository.findByAlbumName(albumName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,6 +156,8 @@ public class AlbumServiceImpl implements AlbumService {
         }
         return false;
     }
+
+
 
     private void saveAlbumImage(Album album, MultipartFile imageFile) throws IOException {
         if (imageFile != null) {

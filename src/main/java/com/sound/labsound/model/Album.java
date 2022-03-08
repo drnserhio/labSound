@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -14,10 +15,10 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Setter
 public class Album {
 
-    @MongoId
+    @Id
+    private String albumName;
     private String id;
     private String artist;
-    private String albumName;
     private String yearRelease;
     private String imagePoster;
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -14,9 +15,8 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Setter
 public class Audio {
 
-    @MongoId
-    private String id;
+    @Id
+    private String soundName;
     private String artist;
     private String albumName;
-    private String soundName;
 }

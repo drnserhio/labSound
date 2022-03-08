@@ -8,6 +8,8 @@ import com.sound.labsound.repos.AlbumRepository;
 import com.sound.labsound.repos.AudioRepository;
 import com.sound.labsound.service.AudioService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
@@ -60,6 +62,7 @@ public class AudioServiceImpl implements AudioService {
         }
         Audio audio = audioRepository.findBySoundName(soundName);
         audioRepository.delete(audio);
+        gridFsTemplate.delete(Query.query(Criteria.where("soundName").is(audio.getSoundName())));
         return true;
     }
 

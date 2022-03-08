@@ -53,6 +53,16 @@ public class AlbumResource {
         return new ResponseEntity<>(album, CREATED);
     }
 
+    @PutMapping("/update_album_info/{albumName}")
+    public ResponseEntity<Album> updateAlbumInfo(
+            @PathVariable("albumName") String albumName,
+            @RequestParam("artist") String artist,
+            @RequestParam("yearRelease") String yearRelease)
+            throws AlbumNotFoundException, ArtistNotFoundException, IOException {
+        Album album = albumService.updateAlbumInfo(albumName, artist, yearRelease);
+        return new ResponseEntity<>(album, CREATED);
+    }
+
 
     @GetMapping("/get_album/{albumName}")
     public ResponseEntity<Album> findByAlbum(
