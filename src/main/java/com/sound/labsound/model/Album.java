@@ -17,7 +17,6 @@ public class Album {
 
     @Id
     private String albumName;
-    private String id;
     private String artist;
     private String yearRelease;
     private String imagePoster;

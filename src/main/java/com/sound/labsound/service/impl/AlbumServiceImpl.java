@@ -9,6 +9,10 @@ import com.sound.labsound.repos.ArtistRepository;
 import com.sound.labsound.service.AlbumService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,10 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -117,7 +118,7 @@ public class AlbumServiceImpl implements AlbumService {
     public Album findByAlbumName(String albumName) {
         Album album = null;
         try {
-           album = albumRepository.findByAlbumName(albumName);
+            album = albumRepository.findByAlbumName(albumName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,28 +126,46 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Set<Album> findAllByArtist(String artist) throws ArtistNotFoundException {
-        Set<Album> albums = new HashSet<>();
+    public Map<String, Object> findAllByArtist(String artist, int page, int size, String column) throws ArtistNotFoundException {
+        Pageable pg = PageRequest.of(page, size, Sort.by(column));
+        Page<Album> p = null;
+        List<Album> albums = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
         try {
-           albums = albumRepository.findAllByArtistContaining(artist);
+            p = albumRepository.findAllByArtistContaining(artist, pg);
+            albums = p.getContent();
+
+            response.put("content", albums);
+            response.put("currentPage", p.getNumber());
+            response.put("totalItems", p.getTotalElements());
+            response.put("totalPages", p.getTotalPages());
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (albums.size() == 0) {
             throw new ArtistNotFoundException("Atrist don't have albums.");
         }
-        return albums;
+        return response;
     }
 
     @Override
-    public List<Album> findAll() {
+    public Map<String, Object> findAll(int page, int size, String column) {
+        Pageable pg = PageRequest.of(page, size, Sort.by(column));
+        Page<Album> p = null;
         List<Album> albums = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
         try {
-           albums = albumRepository.findAll();
+            p = albumRepository.findAll(pg);
+            albums = p.getContent();
+
+            response.put("content", albums);
+            response.put("currentPage", p.getNumber());
+            response.put("totalItems", p.getTotalElements());
+            response.put("totalPages", p.getTotalPages());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return albums;
+        return response;
     }
 
     @Override
@@ -156,7 +175,6 @@ public class AlbumServiceImpl implements AlbumService {
         }
         return false;
     }
-
 
 
     private void saveAlbumImage(Album album, MultipartFile imageFile) throws IOException {

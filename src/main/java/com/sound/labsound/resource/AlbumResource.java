@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static com.sound.labsound.service.impl.AlbumServiceImpl.ALBUM_FOLDER;
 import static com.sound.labsound.service.impl.AlbumServiceImpl.FORWARD_SLASH;
@@ -71,17 +71,23 @@ public class AlbumResource {
         return new ResponseEntity<>(album, OK);
     }
 
-    @GetMapping("/get_all_album_artist/{artist}")
-    public ResponseEntity<Set<Album>> findAllByArtist(
-            @PathVariable("artist") String artist)
+    @PostMapping("/get_all_album_artist/{artist}")
+    public ResponseEntity<Map<String, Object>> findAllByArtist(
+            @PathVariable("artist") String artist,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int size,
+            @RequestParam(defaultValue = "yearRelease") String column)
             throws ArtistNotFoundException {
-        Set<Album> albums = albumService.findAllByArtist(artist);
+        Map<String, Object> albums = albumService.findAllByArtist(artist, page, size, column);
         return new ResponseEntity<>(albums, OK);
     }
 
-    @GetMapping("/all_albums")
-    public ResponseEntity<List<Album>> findAllAlbum() {
-        List<Album> all = albumService.findAll();
+    @PostMapping("/all_albums")
+    public ResponseEntity<Map<String, Object>> findAllAlbum(
+            @RequestParam(defaultValue = "yearRelease") String column,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int size) {
+        Map<String, Object> all = albumService.findAll(page, size, column);
         return new ResponseEntity<>(all, OK);
     }
 

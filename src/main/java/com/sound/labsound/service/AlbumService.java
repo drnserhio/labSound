@@ -4,10 +4,13 @@ import com.sound.labsound.exception.domain.AlbumExistsException;
 import com.sound.labsound.exception.domain.AlbumNotFoundException;
 import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Album;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface AlbumService {
@@ -19,9 +22,9 @@ public interface AlbumService {
 
 
     Album findByAlbumName(String albumName);
-    Set<Album> findAllByArtist(String artist) throws ArtistNotFoundException;
+    Map<String, Object> findAllByArtist(String artist, int page, int size, String column) throws ArtistNotFoundException;
 
-    List<Album> findAll();
+    Map<String, Object> findAll(int page, int size, String column);
 
     boolean existsByAlbumName(String albumName);
 
