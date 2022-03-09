@@ -149,7 +149,7 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Map<String, Object> findAll(int page, int size, String column) {
+    public Map<String, Object> findAll(int page, int size, String column) throws AlbumNotFoundException {
         Pageable pg = PageRequest.of(page, size, Sort.by(column));
         Page<Album> p = null;
         List<Album> albums = new ArrayList<>();
@@ -157,13 +157,15 @@ public class AlbumServiceImpl implements AlbumService {
         try {
             p = albumRepository.findAll(pg);
             albums = p.getContent();
-
             response.put("content", albums);
             response.put("currentPage", p.getNumber());
             response.put("totalItems", p.getTotalElements());
             response.put("totalPages", p.getTotalPages());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (albums.size() == 0) {
+            throw new AlbumNotFoundException("Albums not found");
         }
         return response;
     }

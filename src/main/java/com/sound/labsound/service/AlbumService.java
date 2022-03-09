@@ -24,7 +24,7 @@ public interface AlbumService {
     Album findByAlbumName(String albumName);
     Map<String, Object> findAllByArtist(String artist, int page, int size, String column) throws ArtistNotFoundException;
 
-    Map<String, Object> findAll(int page, int size, String column);
+    Map<String, Object> findAll(int page, int size, String column) throws AlbumNotFoundException;
 
     boolean existsByAlbumName(String albumName);
 

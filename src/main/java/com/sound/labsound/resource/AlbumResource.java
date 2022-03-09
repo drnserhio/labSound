@@ -86,7 +86,8 @@ public class AlbumResource {
     public ResponseEntity<Map<String, Object>> findAllAlbum(
             @RequestParam(defaultValue = "yearRelease") String column,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "1") int size) {
+            @RequestParam(defaultValue = "1") int size)
+            throws AlbumNotFoundException {
         Map<String, Object> all = albumService.findAll(page, size, column);
         return new ResponseEntity<>(all, OK);
     }
