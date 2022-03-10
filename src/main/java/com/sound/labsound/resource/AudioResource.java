@@ -19,7 +19,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/audio")
-@CrossOrigin("http://localhost:4200")
 public class AudioResource {
 
     private final AudioService audioService;

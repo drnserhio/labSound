@@ -6,6 +6,8 @@ import com.sound.labsound.model.Artist;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +24,6 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/artist")
-@CrossOrigin("http://localhost:4200")
 public class ArtistResource {
 
     private final ArtistService artistService;

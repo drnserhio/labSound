@@ -25,7 +25,6 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/album")
-@CrossOrigin("http://localhost:4200")
 public class AlbumResource {
 
     private final AlbumService albumService;

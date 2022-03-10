@@ -5,8 +5,23 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:5600@localhost:27017/audio?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/usersLabsound
+    username: root
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      format_sql: true
   servlet:
     multipart:
       max-file-size: 1000000000
       enabled: true
       file-size-threshold: 100000000
+
+jwt:
+  secret: '[a-zA-Z0-9._]@+$Guidelines89797987forAlpabeticalArraNumeralsandOtherSybo$'
