@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ExceptionHandling {
@@ -51,7 +50,35 @@ public class ExceptionHandling {
         return responseCustomHttpResponse(BAD_REQUEST, "Error occured while processing file.");
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<CustomHttpResponse> userNotFoundException(UserNotFoundException e) {
+        return responseCustomHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(UserNameExistsException.class)
+    public ResponseEntity<CustomHttpResponse> userNameExistsException(UserNameExistsException e) {
+        return responseCustomHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<CustomHttpResponse> emailExistsException(EmailExistsException e) {
+        return responseCustomHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(PasswordNotValidException.class)
+    public ResponseEntity<CustomHttpResponse> passwordNotValidException(PasswordNotValidException e) {
+        return responseCustomHttpResponse(UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(NullOrEmtpyFieldUserException.class)
+    public ResponseEntity<CustomHttpResponse> nullOrEmtpyFieldUserException(NullOrEmtpyFieldUserException e) {
+        return responseCustomHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+
+
     private ResponseEntity<CustomHttpResponse> responseCustomHttpResponse(HttpStatus httpStatus, String message) {
         return new ResponseEntity<>(new CustomHttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase(), message), httpStatus);
     }
+
 }

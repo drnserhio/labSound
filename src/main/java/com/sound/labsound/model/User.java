@@ -26,4 +26,6 @@ public class User {
 
     private String role;
     private Boolean enable;
+
+    private String imageAvatar;
 }
