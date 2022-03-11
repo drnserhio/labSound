@@ -36,7 +36,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         } else {
             String authorization = request.getHeader(AUTHORIZATION);
 
-            if (StringUtils.isNotEmpty(authorization) && authorization.startsWith("Bearer ")) {
+            if (authorization == null ||
+                    !authorization.startsWith("Bearer ")) {
+                filterChain.doFilter(request,response);
+                return;
+            }
+
                 String token = authorization.substring("Bearer ".length());
                 String username = jwtTokenProvider.getSubject(token);
 
@@ -44,16 +49,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                         && SecurityContextHolder.getContext().getAuthentication() == null) {
                     List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(token);
                     Authentication authentication = jwtTokenProvider.getAuthentication(username, authorities, request);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     SecurityContextHolder.clearContext();
                 }
-            } else {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
         }
-
+        filterChain.doFilter(request,response);
     }
 }

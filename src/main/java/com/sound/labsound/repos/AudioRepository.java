@@ -3,10 +3,11 @@ package com.sound.labsound.repos;
 import com.sound.labsound.model.Audio;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
-@EnableMongoRepositories
+@Repository
 public interface AudioRepository extends MongoRepository<Audio, String> {
 
     Audio findByArtist(String artist);
