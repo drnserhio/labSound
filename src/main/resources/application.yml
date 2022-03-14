@@ -3,6 +3,8 @@ server:
 
 spring:
   data:
+    solr:
+      host: http://localhost:8983/solr
     mongodb:
       uri: mongodb://root:5600@localhost:27017/audio?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false
   datasource:

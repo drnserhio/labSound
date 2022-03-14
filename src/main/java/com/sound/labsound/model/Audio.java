@@ -5,8 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.Date;
+
 @Document(collection = "audio")
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Audio {
@@ -15,4 +16,12 @@ public class Audio {
     private String soundName;
     private String artist;
     private String albumName;
+    private Date dateCreate;
+
+    public Audio(String soundName, String artist, String albumName) {
+        this.soundName = soundName;
+        this.artist = artist;
+        this.albumName = albumName;
+        dateCreate = new Date();
+    }
 }

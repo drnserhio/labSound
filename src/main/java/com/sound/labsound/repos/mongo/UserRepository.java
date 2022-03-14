@@ -1,4 +1,4 @@
-package com.sound.labsound.repos;
+package com.sound.labsound.repos.mongo;
 
 import com.sound.labsound.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

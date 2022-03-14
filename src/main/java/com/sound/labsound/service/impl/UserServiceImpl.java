@@ -4,7 +4,7 @@ import com.sound.labsound.exception.domain.*;
 import com.sound.labsound.model.Role;
 import com.sound.labsound.model.User;
 import com.sound.labsound.model.principal.CustomUserPrincipal;
-import com.sound.labsound.repos.UserRepository;
+import com.sound.labsound.repos.mongo.UserRepository;
 import com.sound.labsound.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER.name());
         user.setEnable(true);
-        User save = userRepository.save(user);
-        return save;
+        return userRepository.save(user);
     }
 
     @Override

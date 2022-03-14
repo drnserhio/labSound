@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface ArtistService {
 
@@ -20,6 +21,8 @@ public interface ArtistService {
     boolean existsByArtist(String artistName);
 
     Artist findByArtist(String artistName) throws ArtistNotFoundException;
+
+    Map<String, Object> findAll(int page, int size) throws ArtistNotFoundException;
 
     List<Artist> findAll();
 }

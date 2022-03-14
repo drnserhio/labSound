@@ -1,4 +1,4 @@
-package com.sound.labsound.security;
+package com.sound.labsound.config;
 
 import com.sound.labsound.filter.CustomAccessDeniedHandler;
 import com.sound.labsound.filter.CustomAuthorizationFilter;
@@ -6,14 +6,11 @@ import com.sound.labsound.filter.CustomEntyPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -30,18 +27,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CustomAuthorizationFilter customAuthorizationFilter;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final CustomEntyPoint entyPoint;
+    private final CustomEntyPoint entryPoint;
+    public static final String[] URL = {"/usr/login", "/usr/register", "/**", "/solr/**"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and().sessionManagement().sessionCreationPolicy(STATELESS)
                     .and()
                 .authorizeRequests()
-                .antMatchers( "/usr/login", "/usr/register", "/**").permitAll()
+                .antMatchers(URL).permitAll()
                 .anyRequest().authenticated()
                     .and().
                 exceptionHandling().accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(entyPoint)
+                .authenticationEntryPoint(entryPoint)
                     .and().
                 addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }

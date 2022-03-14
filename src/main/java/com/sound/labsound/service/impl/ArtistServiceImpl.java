@@ -5,12 +5,16 @@ import com.sound.labsound.exception.domain.ArtistNotFoundException;
 import com.sound.labsound.model.Album;
 import com.sound.labsound.model.Artist;
 import com.sound.labsound.model.Audio;
-import com.sound.labsound.repos.AlbumRepository;
-import com.sound.labsound.repos.ArtistRepository;
-import com.sound.labsound.repos.AudioRepository;
+import com.sound.labsound.repos.mongo.AlbumRepository;
+import com.sound.labsound.repos.mongo.ArtistRepository;
+import com.sound.labsound.repos.mongo.AudioRepository;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,8 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -137,6 +140,32 @@ public class ArtistServiceImpl implements ArtistService {
         }
         Artist artist = artistRepository.findByArtist(artistName);
         return artist;
+    }
+
+    @Override
+    public Map<String, Object> findAll(int page, int size)
+            throws ArtistNotFoundException {
+
+        String[] sort = {"id", "title", "countSound", "dateCreate", "artist"};
+        String column = sort [new Random().nextInt(0, 4)];
+        Pageable pg = PageRequest.of(page, size, Sort.by(column));
+        Page<Artist> p = null;
+        List<Artist> artists = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
+        try {
+            p = artistRepository.findAll(pg);
+            artists = p.getContent();
+            response.put("content", artists);
+            response.put("currentPage", p.getNumber());
+            response.put("totalItems", p.getTotalElements());
+            response.put("totalPages", p.getTotalPages());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (artists.size() == 0) {
+            throw new ArtistNotFoundException("Artists not found");
+        }
+        return response;
     }
 
     @Override

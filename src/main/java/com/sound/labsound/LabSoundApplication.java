@@ -1,11 +1,13 @@
 package com.sound.labsound;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -14,11 +16,24 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @SpringBootApplication
+@EnableMongoRepositories(
+        basePackages = "com.sound.labsound.repos.mongo"
+)
+@EnableScheduling
 public class LabSoundApplication {
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(LabSoundApplication.class, args);
     }
+
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void clean() {
+//        solrRefreshCron.syncSaveAllDataForDataBase();
+//    }
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
