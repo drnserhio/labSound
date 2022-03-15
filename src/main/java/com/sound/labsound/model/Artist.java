@@ -1,17 +1,18 @@
 package com.sound.labsound.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.springframework.data.solr.core.mapping.Indexed;
-import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.util.Date;
 
 @Document("artists")
 @NoArgsConstructor
 @Data
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "arts", type = "arts")
 public class Artist {
 
     @Id
