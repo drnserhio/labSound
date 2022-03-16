@@ -8,6 +8,7 @@ import com.sound.labsound.utils.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class UserResource {
     }
 
     @PutMapping("/update_account/{currentUsername}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<User> updateAccount(
             @PathVariable("currentUsername") String currentUsername,
             @RequestBody User user)
@@ -61,12 +63,14 @@ public class UserResource {
     }
 
     @DeleteMapping("/delete/{username}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public boolean removeAccount(
             @PathVariable("username") String username) {
         return userService.removeAccount(username);
     }
 
     @GetMapping("/get_username/{username}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<User> getUserByUsername(
             @PathVariable("username") String username) {
         User usr = userService.getUserByUsername(username);
@@ -74,6 +78,7 @@ public class UserResource {
     }
 
     @GetMapping("/get_email/{email}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<User> getUserByEmail(
             @PathVariable("email") String email) {
         User usr = userService.getUserByEmail(email);
@@ -91,6 +96,7 @@ public class UserResource {
     }
 
     @GetMapping(path = "image/{username}/{filename}", produces = IMAGE_JPEG_VALUE)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public byte[] getImageAvatar(
             @PathVariable("username") String username,
             @PathVariable("filename") String filename) throws IOException {
@@ -98,6 +104,7 @@ public class UserResource {
     }
 
     @PostMapping("/update_image/{username}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> updateImage(
             @PathVariable("username") String username,
             @RequestParam("imageAvatar") MultipartFile imageAvatar)
@@ -107,6 +114,7 @@ public class UserResource {
     }
 
     @PostMapping("/change_password/{username}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> changeNewPassword(
             @PathVariable("username") String username,
             @RequestParam("oldPassword") String oldPassword,
@@ -118,6 +126,7 @@ public class UserResource {
     }
 
     @PostMapping("/reset_password")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> resetPassword(
             @RequestParam("email") String email)
             throws EmailExistsException {

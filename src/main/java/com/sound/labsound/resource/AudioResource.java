@@ -8,6 +8,7 @@ import com.sound.labsound.service.AudioService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class AudioResource {
     private final AudioService audioService;
 
     @PostMapping("/upload")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> uploadAudio(
             @RequestParam("artist") String artist,
             @RequestParam("album") String album,
@@ -36,6 +38,7 @@ public class AudioResource {
 
 
     @GetMapping(value = "/get/{soundName}", produces = "audio/mpeg")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<?> getAudio(
             @PathVariable("soundName") String soundName)
             throws AudioExistsException {
@@ -44,6 +47,7 @@ public class AudioResource {
     }
 
     @GetMapping("/all_audio_by_artist/{artist}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Set<Audio>> getAllAudiosByArtist(
             @PathVariable("artist") String artist) {
         Set<Audio> allAudiosByArtist = audioService.getAllAudiosByArtist(artist).get();
@@ -51,6 +55,7 @@ public class AudioResource {
     }
 
     @GetMapping("/all_audio_by_album/{album}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Set<Audio>> getAllAudiosByAlbumName(
             @PathVariable("album") String album) throws AlbumNotFoundException, AudioExistsException {
         Set<Audio> allAudiosByArtist = audioService.getAllAudiosByAlbumName(album).get();
@@ -58,6 +63,7 @@ public class AudioResource {
     }
 
     @DeleteMapping("/delete_audio/{soundName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> deleteAudio(
             @PathVariable("soundName") String soundName)
             throws AudioNotFoundException {

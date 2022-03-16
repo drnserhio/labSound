@@ -6,6 +6,8 @@ import com.sound.labsound.model.Artist;
 import com.sound.labsound.service.ArtistService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,7 @@ public class ArtistResource {
 
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Artist> createArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist,
@@ -39,6 +42,7 @@ public class ArtistResource {
     }
 
     @PostMapping("/create_artist")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Artist> createArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist)
@@ -48,6 +52,7 @@ public class ArtistResource {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Artist> updateArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist,
@@ -58,6 +63,7 @@ public class ArtistResource {
     }
 
     @PutMapping("/update_artist")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Artist> updateArtist(
             @RequestParam("fileImage") MultipartFile fileImage,
             @RequestParam("artist") String artist)
@@ -67,6 +73,7 @@ public class ArtistResource {
     }
 
     @DeleteMapping("/delete_artist/{artistName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> deleteArtist(
             @PathVariable("artistName") String artistName)
             throws ArtistNotFoundException {
@@ -76,6 +83,7 @@ public class ArtistResource {
 
 
     @GetMapping("/get_artist/{artistName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Artist> findByArtist(
             @PathVariable("artistName") String artistName)
             throws ArtistNotFoundException {
@@ -91,6 +99,7 @@ public class ArtistResource {
     }
 
     @PostMapping("/all_artist")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Map<String, Object>> getAllArtist(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size)
@@ -100,6 +109,7 @@ public class ArtistResource {
     }
 
     @GetMapping("/all_list")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<List<Artist>> getArtists() {
         List<Artist> all = artistService.findAll();
         return new ResponseEntity<>(all, OK);

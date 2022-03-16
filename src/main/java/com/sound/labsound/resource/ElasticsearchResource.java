@@ -6,6 +6,7 @@ import com.sound.labsound.service.AlbumElasticsearchService;
 import com.sound.labsound.service.ArtistElasicsearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class ElasticsearchResource {
 
 
     @GetMapping("/get/artists/{searchTerm}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<List<Artist>> searchTermArtist(
             @PathVariable("searchTerm") String searchTerm) {
         List<Artist> artists = artistElasicsearch.findAllByArtist(searchTerm);
@@ -32,6 +34,7 @@ public class ElasticsearchResource {
     }
 
     @GetMapping("/get/albums/{searchTerm}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<List<Album>> searchTermAlbum(
             @PathVariable("searchTerm") String searchTerm) {
         List<Album> albums = albumElasticsearch.findAllByAlbum(searchTerm);

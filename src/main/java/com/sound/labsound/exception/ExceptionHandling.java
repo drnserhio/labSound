@@ -4,6 +4,8 @@ import com.sound.labsound.exception.domain.*;
 import com.sound.labsound.model.CustomHttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,6 +25,11 @@ public class ExceptionHandling {
     @ExceptionHandler(AlbumNotFoundException.class)
     public ResponseEntity<CustomHttpResponse> albumNotFoundException(AlbumNotFoundException e) {
         return responseCustomHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomHttpResponse> accessDeniedException() {
+        return responseCustomHttpResponse(FORBIDDEN, "You do not have enough permission");
     }
 
     @ExceptionHandler(ArtistExistsException.class)

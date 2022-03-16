@@ -7,6 +7,7 @@ import com.sound.labsound.model.Album;
 import com.sound.labsound.service.AlbumService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ public class AlbumResource {
 
 
     @PostMapping("/create_album/{albumName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Album> createAlbum(
             @RequestParam("imageFile") MultipartFile imageFile,
             @PathVariable("albumName") String albumName,
@@ -42,6 +44,7 @@ public class AlbumResource {
     }
 
     @PutMapping("/update_album/{albumName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Album> updateAlbum(
             @RequestParam("imageFile") MultipartFile imageFile,
             @PathVariable("albumName") String albumName,
@@ -53,6 +56,7 @@ public class AlbumResource {
     }
 
     @PutMapping("/update_album_info/{albumName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Album> updateAlbumInfo(
             @PathVariable("albumName") String albumName,
             @RequestParam("artist") String artist,
@@ -64,6 +68,7 @@ public class AlbumResource {
 
 
     @GetMapping("/get_album/{albumName}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Album> findByAlbum(
             @PathVariable("albumName") String albumName) {
         Album album = albumService.findByAlbumName(albumName);
@@ -71,6 +76,7 @@ public class AlbumResource {
     }
 
     @PostMapping("/get_all_album_artist/{artist}")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Map<String, Object>> findAllByArtist(
             @PathVariable("artist") String artist,
             @RequestParam(defaultValue = "0") int page,
@@ -82,6 +88,7 @@ public class AlbumResource {
     }
 
     @PostMapping("/all_albums")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Map<String, Object>> findAllAlbum(
             @RequestParam(defaultValue = "yearRelease") String column,
             @RequestParam(defaultValue = "0") int page,
@@ -92,6 +99,7 @@ public class AlbumResource {
     }
 
     @DeleteMapping("/delete_album/{album}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Boolean> deleteAlbum(
             @PathVariable("album") String album)
             throws AlbumNotFoundException {
@@ -100,6 +108,7 @@ public class AlbumResource {
     }
 
     @GetMapping(path = "image/{albumName}/{filename}", produces = IMAGE_JPEG_VALUE)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER')")
     public byte[] getAlbumImage(
             @PathVariable("albumName") String albumName,
             @PathVariable("filename") String filename) throws IOException {
